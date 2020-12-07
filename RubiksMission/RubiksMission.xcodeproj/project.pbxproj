@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		791EC10E257E333600BE9BC2 /* RubiksCube.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791EC10D257E333600BE9BC2 /* RubiksCube.swift */; };
 		792229A9257DF929006F9A2E /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792229A8257DF929006F9A2E /* main.swift */; };
+		799CF759257E5507009E9178 /* Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799CF758257E5507009E9178 /* Section.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -27,6 +28,7 @@
 		791EC10D257E333600BE9BC2 /* RubiksCube.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RubiksCube.swift; sourceTree = "<group>"; };
 		792229A5257DF929006F9A2E /* RubiksMission */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = RubiksMission; sourceTree = BUILT_PRODUCTS_DIR; };
 		792229A8257DF929006F9A2E /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		799CF758257E5507009E9178 /* Section.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Section.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +63,7 @@
 			children = (
 				792229A8257DF929006F9A2E /* main.swift */,
 				791EC10D257E333600BE9BC2 /* RubiksCube.swift */,
+				799CF758257E5507009E9178 /* Section.swift */,
 			);
 			path = RubiksMission;
 			sourceTree = "<group>";
@@ -122,6 +125,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				799CF759257E5507009E9178 /* Section.swift in Sources */,
 				791EC10E257E333600BE9BC2 /* RubiksCube.swift in Sources */,
 				792229A9257DF929006F9A2E /* main.swift in Sources */,
 			);
