@@ -1,7 +1,4 @@
 import Foundation
 
-// Type quit to exit
-var pushOutWord = PushOutWord()
-pushOutWord.startPushOutWord()
-
-
+var flatCube = FlatCube(cube: [["R", "R", "W"], ["G", "C", "W"], ["G", "B", "B"]])
+flatCube.playFlatCube()

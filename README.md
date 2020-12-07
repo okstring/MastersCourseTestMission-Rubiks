@@ -1,25 +1,10 @@
-# 1단계: 단어 밀어내기 구현하기
+# 2단계: 평면 큐브 구현하기
 
 
 
 ## 프로그램 종료
 
-while 무한루프로 구동이 되고 편의를 위해 **quit**를 입력하면 프로그램이 종료됩니다
-
-
-
-## 다시 입력받게되는 경우
-
-아래의 경우에는 정상적인 입력이라 판단이 되지 않고 주의 문구가 나오면서 다시 입력받게 됩니다
-
-1. number가 Int로 변환이 되지 않는 타입일 때 
-   - `"올바른 정수가 아닙니다"`
-2. 단어, 숫자, 방향마다 띄어쓰기를 하지 않고 하나라도 미기입 했을 때
-   - `"올바른 입력이 아닙니다 단어 하나, 정수 숫자 하나, L 또는 R을 띄어서 입력해주세요"`
-3. 숫자의 범위가 -100 <= N < 100를 벗어나는 경우
-   - `"올바른 정수 범위가 아닙니다 -100 <= N < 100 사이를 입력해주세요"`
-4. 방향 기입이 L 또는 R이 아닌 경우(대소문자 상관 없음)
-   - `"올바른 방향이 아닙니다 L 또는 R을 입력해주세요"`
+잘못된 커맨드 입력 또는 `Q` 입력 시 프로그램 종료
 
 
 
@@ -27,27 +12,28 @@ while 무한루프로 구동이 되고 편의를 위해 **quit**를 입력하면
 
 - readLine을 통해 입력을 받습니다
 
-- 올바른 입력은 다음과 같습니다
+- 올바른 입력은 다음 문자열중에 포함되어야 합니다
 
-  > "\\(단어) \\(정수 숫자) \\(L(l) 또는 R(r))"
+  > `"U", "U'", "R", "R'", "L", "L'", "B", "B'", "Q"`
 
-- 입력을 받게 되면 공백으로(`" "`) split합니다
-  - split해서 count가 3이 아니라면 다시 입력을 받게 됩니다
+- 객체 생성 시 2차원 Array(CubeMatrix)를 입력받게 합니다. 이는 Mission 요구사항 중 객체 활용을 위함입니다. 그 이후 출력 메소드를 호출합니다
 
-- 각각. 값들은 구조체 프로퍼티에 저장됩니다. 이는 구조체 내 메소드로 간결함을 더하기 위함입니다
+- 밀어내는 방향, 밀어낼 row 또는 col을 enum으로 분류합니다. 
+  - 특히 row 또는 col은 index를 지정해주어 후에 코드 양을 줄입니다
+- `readLine()` 을 계속 입력받게하는 loop와 각각의 command를 실행하기위한 loop가 있으므로 Bool 타입의 `exit` 로 조건에 충족하면 while문을 끝내도록(프로그램을 종료하도록) 합니다
+- input을 받고 command를 파악합니다 
+  - `'` 가 붙어있는지 `input.first` 를 통해 확인합니다
+  - `Q` 를 입력받은 경우 `break`, `exit`에 `true` 값을 줍니다(프로그램을 끝냅니다)
 
-  - 방향 알파벳 대소문자는 `uppercased()`로 통일시킵니다
+- `switch` 문으로 각 command에 따른 Method를 실행합니다
+  - `private mutating func verticalPush(col: SideLineToMove, direction: VerticalPushDirection)` 
+    - TopValue를 변수로 저장해두고 값을 하나씩 올리거나 내립니다
+    - column Index는 enum rawValue를 활용합니다
+  - `private mutating func horisonPush(row: UpperAndLowerLineToMove, direction: HorizonPushDirection)` 
+    - 해당 행의 첫번째 값 / 마지막 값을 빼서 반대로 가져와 합쳐줍니다 
+    - Row Index는 enum rawValue를 활용합니다
 
-  - Int로 변환할 수 있는 number가 아니라면 다시 입력을 받습니다
+## 기타
 
-  - number가 허용범위가 아니라면 다시 입력을 받습니다
-  - 방향이 L 또는 R이 아니라면 다시 입력을 받습니다
-
-- 만약 "L"이지만 number가 음수라면 "R"방향으로 움직이기 때문에 number가 음수라면 숫자를 절대값으로 바꿔주고 방향 값을 반대로 바꿔줍니다
-
-- While loop로 Character를 count번 push합니다
-  - L이라면 word의 첫번째 글자를 빼서 뒤에다가 넣어줍니다.`removeFirst()`
-  - R이라면 word의 마지막 글자를 빼서 뒤에다가 넣어줍니다.`removeLast()`
-
-- 출력하고 다시 입력을 받습니다
-
+- Mission의 동작 예시에 맞춰 newLine을 맞춥니다
+- Mission 요구사항에 맞춰 Method를 나눕니다
