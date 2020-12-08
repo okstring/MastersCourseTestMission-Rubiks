@@ -8,6 +8,8 @@ struct RubiksCube {
     var Y: Section
     var O: Section
     var R: Section
+    var startTime: TimeInterval!
+    var endTime: TimeInterval!
     
     init() {
         self.W = Section(value: "W")
@@ -16,6 +18,24 @@ struct RubiksCube {
         self.Y = Section(value: "Y")
         self.O = Section(value: "O")
         self.R = Section(value: "R")
+    }
+    
+    mutating func startRubiksCube() {
+        self.startTime = Date().timeIntervalSince1970
+        
+        
+    }
+    
+    mutating func printElapsedTimeAndResult() -> Bool {
+        self.endTime = Date().timeIntervalSince1970
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "mm:ss"
+        
+        let elapsedTime = Date(timeIntervalSince1970: endTime - startTime)
+        print("경과시간: ", elapsedTime)
+        print("이용해주셔서 감사합니다. 뚜뚜뚜.")
+        return true
     }
     
     func printRubiksCube() {
@@ -32,6 +52,6 @@ struct RubiksCube {
             print(Y.section[rowIndex].joined(separator: " "))
         }
         print()
-        B.printSection()
+        R.printSection()
     }
 }
