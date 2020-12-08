@@ -8,6 +8,7 @@ struct RubiksCube {
     var Y: Section
     var O: Section
     var R: Section
+    var sections: [Section]
     var startTime: TimeInterval!
     var endTime: TimeInterval!
     
@@ -18,6 +19,7 @@ struct RubiksCube {
         self.Y = Section(value: "Y")
         self.O = Section(value: "O")
         self.R = Section(value: "R")
+        sections = [W, B, G, Y, O, R]
     }
     
     mutating func startRubiksCube() {
@@ -26,7 +28,16 @@ struct RubiksCube {
         
     }
     
-    mutating func printElapsedTimeAndResult() -> Bool {
+    private func checkRubiksCube() -> Bool {
+        for section in sections {
+            if Set(section.matrix.flatMap({ $0 })).count != 1 {
+                return false
+            }
+        }
+        return true
+    }
+    
+    private mutating func printElapsedTimeAndResult(result: Bool) -> Bool {
         self.endTime = Date().timeIntervalSince1970
         
         let dateFormatter = DateFormatter()
@@ -34,22 +45,26 @@ struct RubiksCube {
         
         let elapsedTime = Date(timeIntervalSince1970: endTime - startTime)
         print("경과시간: ", elapsedTime)
-        print("이용해주셔서 감사합니다. 뚜뚜뚜.")
+        if result {
+            print("축하드립니다!! 큐브 맞추기를 꽤 잘하시네요!")
+        } else {
+            print("이용해주셔서 감사합니다. 뚜뚜뚜.")
+        }
         return true
     }
     
-    func printRubiksCube() {
+    private func printRubiksCube() {
         B.printSection()
         print()
         for rowIndex in 0...2 {
             print(" ", terminator: "")
-            print(W.section[rowIndex].joined(separator: " "), terminator: "")
+            print(W.matrix[rowIndex].joined(separator: " "), terminator: "")
             print(String(repeating: " ", count: 5), terminator: "")
-            print(O.section[rowIndex].joined(separator: " "), terminator: "")
+            print(O.matrix[rowIndex].joined(separator: " "), terminator: "")
             print(String(repeating: " ", count: 5), terminator: "")
-            print(G.section[rowIndex].joined(separator: " "), terminator: "")
+            print(G.matrix[rowIndex].joined(separator: " "), terminator: "")
             print(String(repeating: " ", count: 5), terminator: "")
-            print(Y.section[rowIndex].joined(separator: " "))
+            print(Y.matrix[rowIndex].joined(separator: " "))
         }
         print()
         R.printSection()
