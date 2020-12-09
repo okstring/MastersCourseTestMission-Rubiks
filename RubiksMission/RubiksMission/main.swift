@@ -1,5 +1,6 @@
 import Foundation
 
 var rubiksCube = RubiksCube()
-rubiksCube.printRubiksCube()
+rubiksCube.shuffleRubiksCube()
 rubiksCube.startRubiksCube()
+
