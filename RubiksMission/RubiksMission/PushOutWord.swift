@@ -1,12 +1,16 @@
 import Foundation
 
 struct PushOutWord {
-    var word: String = ""
-    var direction: String = ""
-    var absNumber: Int = 0
+    private var word: String = ""
+    private var direction: String = ""
+    private var absNumber: Int = 0
     
     mutating func startPushOutWord() {
-        while let input = readLine() {
+        while true {
+            print("> ", terminator: "")
+            let read = readLine()
+            guard let input = read else { continue }
+            
             guard input != "quit" else { break }
             
             let splitWord = input.split(separator: " ")
@@ -64,7 +68,6 @@ struct PushOutWord {
     private func isLOrR(_ direction: String) -> Bool {
         if direction != "L" && direction != "R" {
             print("올바른 방향이 아닙니다 L 또는 R을 입력해주세요")
-            print(self.absNumber, self.direction, self.word)
             return false
         }
         return true
