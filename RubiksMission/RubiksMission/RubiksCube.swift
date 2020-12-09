@@ -81,9 +81,15 @@ printRubiksCube(): 현재 Cube를 출력합니다.
             if command == "Q" { quit = true; break }
             
             if let digit = Int(command){ repeatCount = digit } // 숫자면
-            if repeatCount != 1 && input != "" { command = String(input.removeFirst()) } // 또 꺼내기
-            guard let reverseSign = input.first else { break }
-            if reverseSign == "'" { command.append(input.removeFirst()) } // 작은 따옴표면 reverse
+            if repeatCount != 1 && input != "" {
+                command = String(input.removeFirst()) // 또 꺼내기
+            }
+            if let reverseSign = input.first{
+                if reverseSign == "'" { // 작은 따옴표면 reverse
+                    command.append(input.removeFirst())
+                }
+            }
+            
             
             executeRotate(command, count: repeatCount, isShuffle: false)
             isComplete = isCompleteRubiksCube()
