@@ -24,13 +24,26 @@ class RubiksCube {
     private var R: Section = Section(value: "R") // bottom
     
     private var sections: [Section]
-    private var startTime: TimeInterval = 0
+    private var startTime: TimeInterval = Date().timeIntervalSince1970
     private var numberOfOperations = 0
     
     private let commands = ["U", "U'", "L", "L'", "F", "F'", "R", "R'", "B", "B'", "D", "D'"]
     
+    private var isComplete = false
+    private var command = ""
+    private var repeatCount = 1
+    
     init() {
         sections = [W, O, G, Y, B, R]
+        
+        //"O": ["top": [B, Side.bottom], "right": [G, Side.left], "bottom": [R, Side.reverseTop], "left": [W,  Side.reverseRight]],
+                            //"B": ["top": [Y, Side.reverseTop], "right": [G, Side.reverseTop], "bottom": [O, Side.reverseTop], "left": [W, Side.reverseTop]],
+                            //"G": ["top": [B, Side.reverseRight], "right": [Y, Side.left], "bottom": [R, Side.reverseRight], "left": [O, Side.reverseRight]],
+                            //"R": ["top": [O, Side.bottom], "right": [G, Side.bottom], "bottom": [Y, Side.bottom], "left": [W, Side.bottom]],
+                            //"W": ["top": [B, Side.left], "right": [O, Side.left], "bottom": [R, Side.left], "left": [Y, Side.reverseRight]],
+                            //"Y": ["top": [B, Side.reverseTop], "right": [W, Side.left], "bottom": [R, Side.top], "left": [G, Side.reverseRight]]
+        
+        
         printRubiksCube()
         print("""
 
@@ -64,40 +77,44 @@ printRubiksCube(): 현재 Cube를 출력합니다.
     }
     
     func startRubiksCube() {
-        self.startTime = Date().timeIntervalSince1970
-        var isComplete = false
-        var quit = false
         var input = ""
-        
         while !isComplete {
             if input == "" {
                 print("\nCUBE> ", terminator: "")
                 input = readLine() ?? ""
             }
+            command = String(input.removeFirst())
+            repeatCount = 1
             
-            var command = String(input.removeFirst())
-            var repeatCount = 1
+            if command == "Q" { break }
             
-            if command == "Q" { quit = true; break }
-            
-            if let digit = Int(command){ repeatCount = digit } // 숫자면
-            if repeatCount != 1 && input != "" {
-                command = String(input.removeFirst()) // 또 꺼내기
-            }
-            if let reverseSign = input.first{
-                if reverseSign == "'" { // 작은 따옴표면 reverse
-                    command.append(input.removeFirst())
-                }
-            }
-            
+            input = extractSubCommandAndRepeatCount(input)
             
             executeRotate(command, count: repeatCount, isShuffle: false)
             isComplete = isCompleteRubiksCube()
-            if quit { break }
         }
         
         printElapsedTimeAndResult(result: isComplete)
     }
+    
+    func extractSubCommandAndRepeatCount(_ input: String) -> String {
+        var classified = input
+        
+        if let digit = Int(command){ // 숫자면
+            repeatCount = digit
+        }
+        
+        if repeatCount != 1 && input != "" { // 커멘드 있으면 꺼내기
+            command = String(classified.removeFirst())
+        }
+        
+        if input.first != nil && input.first! == "'" {  // is reverse?
+            command.append(classified.removeFirst())
+        }
+        
+        return classified
+    }
+    
     
     private func isCompleteRubiksCube() -> Bool {
         for section in sections {
@@ -292,5 +309,4 @@ printRubiksCube(): 현재 Cube를 출력합니다.
             front = [result[0].reversed(), result[1].reversed(), result[2].reversed()] // 90
         }
     }
-    
 }

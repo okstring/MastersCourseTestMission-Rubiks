@@ -28,16 +28,16 @@
 
 ### 게임 시작 시
 
-- 정답 유무, loop문 break를 위해 게임 시작 시 `quit`, `isComplete` 를 선언
+- 정답 유무, loop문 break를 위해 게임 시작 시 `isComplete` 를 선언
 - input을 `readline()` 으로 입력받고 `command` 하나씩 구분
   - 만약 커멘드 뒤에 `'` (작은 따옴표)가 있다면 안전하게 command에 추가시킨다
   - 또는 커멘드 앞에 숫자가 있다면 repeatCount에 할당한다
-  - command가 `Q` 면 `quit` 변수에 `true` 를 주고 반복문을 빠져나옵니다(게임을 끝낸다)
+  - command가 `Q` 면 반복문을 빠져나옵니다(게임을 끝낸다)
 - `repeatCount` 와 함께 조건제 맞는 rotate를 실행합니다.. `(executeRotete_, count: Int)`
 - Rotate 후 `isCompleteRubikscube()` 에서 각 면의 value가 한가지 종류 즉, 큐브를 다 맞췄는지 검사하고 Bool값을 `isComplete` 에 넣어줍니다
 
 - 게임이 끝나면 경과 시간 및 조작 횟수를 프린트하는 `printElapsedtimeAndResult(result: Bool)` 를 실행
-  - start Time은 `startRubiksCube()` 실행 시, end Time은 `printElapsedTimeAndResult(result:Boo;)` 을 실행 시 측정하고 `dataFormatter` 를 통해 형식을 지정
+  - start Time은 객체 생성 시, end Time은 `printElapsedTimeAndResult(result:Boo;)` 을 실행 시 측정하고 `dataFormatter` 를 통해 형식을 지정
 
 
 
