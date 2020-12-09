@@ -96,32 +96,44 @@ class RubiksCube {
                     switch command {
                     case "U":
                         rotateFront(of: &B.matrix, isReverse: false)
-                        rotateSideValue(top: &B, topSide: .bottom, right: &G, rightSide: .left,
-                                        bottom: &R, bottomSide: .reverseTop, left: &W, leftSide: .reverseRight)
+                        rotateSideValue(top: &Y, topSide: .reverseTop, right: &G, rightSide: .reverseTop, bottom: &O, bottomSide: .reverseTop, left: &W, leftSide: .reverseTop)
                     case "U'":
                         rotateFront(of: &B.matrix, isReverse: true)
+                        reverseRotateSideValue(top: &Y, topSide: .reverseTop, right: &G, rightSide: .reverseTop, bottom: &O, bottomSide: .reverseTop, left: &W, leftSide: .reverseTop)
                     case "L":
                         rotateFront(of: &W.matrix, isReverse: false)
+                        rotateSideValue(top: &B, topSide: .left, right: &O, rightSide: .left, bottom: &R, bottomSide: .reverseLeft, left: &Y, leftSide: .reverseRight)
                     case "L'":
                         rotateFront(of: &W.matrix, isReverse: true)
+                        reverseRotateSideValue(top: &B, topSide: .left, right: &O, rightSide: .left, bottom: &R, bottomSide: .reverseLeft, left: &Y, leftSide: .reverseRight)
                     case "F":
                         rotateFront(of: &O.matrix, isReverse: false)
+                        rotateSideValue(top: &B, topSide: .bottom, right: &G, rightSide: .left,
+                                        bottom: &R, bottomSide: .reverseTop, left: &W, leftSide: .right)
                     case "F'":
                         rotateFront(of: &O.matrix, isReverse: true)
+                        reverseRotateSideValue(top: &B, topSide: .bottom, right: &G, rightSide: .left,
+                                        bottom: &R, bottomSide: .reverseTop, left: &W, leftSide: .right)
                     case "R":
                         rotateFront(of: &G.matrix, isReverse: false)
+                        rotateSideValue(top: &B, topSide: .reverseRight, right: &Y, rightSide: .left, bottom: &R, bottomSide: .reverseRight, left: &O, leftSide: .right)
                     case "R'":
                         rotateFront(of: &G.matrix, isReverse: true)
+                        reverseRotateSideValue(top: &B, topSide: .reverseRight, right: &Y, rightSide: .left, bottom: &R, bottomSide: .reverseRight, left: &O, leftSide: .right)
                     case "B":
                         rotateFront(of: &Y.matrix, isReverse: false)
+                        rotateSideValue(top: &B, topSide: .reverseTop, right: &W, rightSide: .reverseLeft, bottom: &R, bottomSide: .top, left: &G, leftSide: .reverseRight)
                     case "B'":
                         rotateFront(of: &Y.matrix, isReverse: true)
+                        reverseRotateSideValue(top: &B, topSide: .reverseTop, right: &W, rightSide: .reverseLeft, bottom: &R, bottomSide: .top, left: &G, leftSide: .reverseRight)
                     case "D":
                         rotateFront(of: &R.matrix, isReverse: false)
+                        rotateSideValue(top: &O, topSide: .bottom, right: &G, rightSide: .bottom, bottom: &Y, bottomSide: .bottom, left: &W, leftSide: .bottom)
                     case "D'":
                         rotateFront(of: &R.matrix, isReverse: true)
+                        reverseRotateSideValue(top: &O, topSide: .bottom, right: &G, rightSide: .bottom, bottom: &Y, bottomSide: .bottom, left: &W, leftSide: .bottom)
                     default:
-                        print("command(\(command)가 올바르지 않습니다")
+                        print("command(\(command))가 올바르지 않습니다.")
                     }
                     
                     printRubiksCube()
@@ -151,9 +163,9 @@ class RubiksCube {
     
     func reverseRotateSideValue(top: inout Section , topSide: Side, right: inout Section, rightSide: Side, bottom: inout Section, bottomSide: Side, left: inout Section, leftSide: Side) {
         let toLeftValue = findSideValue(of: top.name, side: topSide)
-        let toTopValue = findSideValue(of: right.name, side: rightSide)
-        let toRightValue = findSideValue(of: bottom.name, side: bottomSide)
         let toBottomValue = findSideValue(of: left.name, side: leftSide)
+        let toRightValue = findSideValue(of: bottom.name, side: bottomSide)
+        let toTopValue = findSideValue(of: right.name, side: rightSide)
         
         top.matrix = changeSideValue(of: top.name, side: topSide, value: toTopValue)
         bottom.matrix = changeSideValue(of: bottom.name, side: bottomSide, value: toBottomValue)
@@ -239,7 +251,7 @@ class RubiksCube {
         dateFormatter.dateFormat = "mm:ss"
         
         let elapsedTime = Date(timeIntervalSince1970: endTime - startTime)
-        print("경과시간: ", elapsedTime)
+        print("경과시간: ", dateFormatter.string(from: elapsedTime))
         if result {
             print("축하드립니다!! 큐브 맞추기를 꽤 잘하시네요!")
         } else {
