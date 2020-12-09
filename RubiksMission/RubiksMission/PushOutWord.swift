@@ -19,7 +19,6 @@ struct PushOutWord {
             self.word = String(splitWord[0])
             self.direction = String(splitWord[2]).uppercased()
             guard let number = Int(splitWord[1]) else {
-                print(self.absNumber, self.direction, self.word)
                 print("올바른 정수가 아닙니다")
                 continue
             }
