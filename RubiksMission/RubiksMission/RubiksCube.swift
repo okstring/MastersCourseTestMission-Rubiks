@@ -16,12 +16,12 @@ W W W     O O O     G G G     Y Y Y
  */
 
 class RubiksCube {
-    private var W: Section = Section(value: "W") // left
-    private var O: Section = Section(value: "O") // front
-    private var G: Section = Section(value: "G") // right
-    private var Y: Section = Section(value: "Y") // back
-    private var B: Section = Section(value: "B") // top
-    private var R: Section = Section(value: "R") // bottom
+    var W: Section = Section(value: "W") // left
+    var O: Section = Section(value: "O") // front
+    var G: Section = Section(value: "G") // right
+    var Y: Section = Section(value: "Y") // back
+    var B: Section = Section(value: "B") // top
+    var R: Section = Section(value: "R") // bottom
     
     private var sections: [Section]
     private var startTime: TimeInterval = Date().timeIntervalSince1970
@@ -33,19 +33,7 @@ class RubiksCube {
     private var command = ""
     private var repeatCount = 1
     
-    init() {
-        sections = [W, O, G, Y, B, R]
-        
-        //"O": ["top": [B, Side.bottom], "right": [G, Side.left], "bottom": [R, Side.reverseTop], "left": [W,  Side.reverseRight]],
-                            //"B": ["top": [Y, Side.reverseTop], "right": [G, Side.reverseTop], "bottom": [O, Side.reverseTop], "left": [W, Side.reverseTop]],
-                            //"G": ["top": [B, Side.reverseRight], "right": [Y, Side.left], "bottom": [R, Side.reverseRight], "left": [O, Side.reverseRight]],
-                            //"R": ["top": [O, Side.bottom], "right": [G, Side.bottom], "bottom": [Y, Side.bottom], "left": [W, Side.bottom]],
-                            //"W": ["top": [B, Side.left], "right": [O, Side.left], "bottom": [R, Side.left], "left": [Y, Side.reverseRight]],
-                            //"Y": ["top": [B, Side.reverseTop], "right": [W, Side.left], "bottom": [R, Side.top], "left": [G, Side.reverseRight]]
-        
-        
-        printRubiksCube()
-        print("""
+    private let gameGuide = """
 
 ---------------------------------------------
 
@@ -60,10 +48,48 @@ printRubiksCube(): 현재 Cube를 출력합니다.
 
 ---------------------------------------------
 
-""")
+"""
+    
+    init() {
+        sections = [W, O, G, Y, B, R]
+        
+        O.closeSections = ["top": B.name, "right": G.name, "bottom": R.name, "left": W.name]
+        O.closeRow = ["top": .bottom, "right": .left, "bottom": .reverseTop, "left": .right]
+        B.closeSections = ["top": Y.name, "right": G.name, "bottom": O.name, "left": W.name]
+        B.closeRow = ["top": .reverseTop, "right": .reverseTop, "bottom": .reverseTop, "left": .reverseTop]
+        G.closeSections = ["top": B.name, "right": Y.name, "bottom": R.name, "left": O.name]
+        G.closeRow = ["top": .reverseRight, "right": .left, "bottom": .reverseRight, "left": .right]
+        R.closeSections = ["top": O.name, "right": G.name, "bottom": Y.name, "left": W.name]
+        R.closeRow = ["top": .bottom, "right": .bottom, "bottom": .bottom, "left": .bottom]
+        W.closeSections = ["top": B.name, "right": O.name, "bottom": R.name, "left": Y.name]
+        W.closeRow = ["top": .left, "right": .left, "bottom": .reverseLeft, "left": .reverseRight]
+        Y.closeSections = ["top": B.name, "right": W.name, "bottom": R.name, "left": G.name]
+        Y.closeRow = ["top": .reverseTop, "right": .reverseLeft, "bottom": .top, "left": .reverseRight]
+
+        printRubiksCube()
+        print(gameGuide)
+
     }
     
-    typealias Matrix = Array<Array<String>>
+    subscript(name: String) -> Section {
+        get {
+            guard let section = sections.filter({ $0.name == name }).first else {
+                assert(false, "subscript name이 올바르지 않습니다")
+            }
+            return section
+        }
+        set(newValue) {
+            switch name {
+            case "W": self.W = newValue
+            case "O": self.O = newValue
+            case "G": self.G = newValue
+            case "Y": self.Y = newValue
+            case "B": self.B = newValue
+            case "R": self.R = newValue
+            default: break
+            }
+        }
+    }
     
     enum Side {
         case top
@@ -168,98 +194,79 @@ printRubiksCube(): 현재 Cube를 출력합니다.
     }
     
     
+    private func countOperationAndPrintRubiksCube() {
+        numberOfOperations += 1
+        printRubiksCube()
+    }
+    
     // MARK: Rotate Method
     
     private func executeRotate(_ command: String, count: Int, isShuffle: Bool) {
         for _ in 1...count {
             if !isShuffle{ print("\n\(command)") }
-
             switch command {
-            case "U":
-                rotateFront(of: &B.matrix, isReverse: false)
-                rotateSideValue(top: &Y, topSide: .reverseTop, right: &G, rightSide: .reverseTop,
-                                bottom: &O, bottomSide: .reverseTop, left: &W, leftSide: .reverseTop)
-            case "U'":
-                rotateFront(of: &B.matrix, isReverse: true)
-                reverseRotateSideValue(top: &Y, topSide: .reverseTop, right: &G, rightSide: .reverseTop,
-                                       bottom: &O, bottomSide: .reverseTop, left: &W, leftSide: .reverseTop)
-            case "L":
-                rotateFront(of: &W.matrix, isReverse: false)
-                rotateSideValue(top: &B, topSide: .left, right: &O, rightSide: .left,
-                                bottom: &R, bottomSide: .reverseLeft, left: &Y, leftSide: .reverseRight)
-            case "L'":
-                rotateFront(of: &W.matrix, isReverse: true)
-                reverseRotateSideValue(top: &B, topSide: .left, right: &O, rightSide: .left,
-                                       bottom: &R, bottomSide: .reverseLeft, left: &Y, leftSide: .reverseRight)
-            case "F":
-                rotateFront(of: &O.matrix, isReverse: false)
-                rotateSideValue(top: &B, topSide: .bottom, right: &G, rightSide: .left,
-                                bottom: &R, bottomSide: .reverseTop, left: &W, leftSide: .right)
-            case "F'":
-                rotateFront(of: &O.matrix, isReverse: true)
-                reverseRotateSideValue(top: &B, topSide: .bottom, right: &G, rightSide: .left,
-                                bottom: &R, bottomSide: .reverseTop, left: &W, leftSide: .right)
-            case "R":
-                rotateFront(of: &G.matrix, isReverse: false)
-                rotateSideValue(top: &B, topSide: .reverseRight, right: &Y, rightSide: .left,
-                                bottom: &R, bottomSide: .reverseRight, left: &O, leftSide: .right)
-            case "R'":
-                rotateFront(of: &G.matrix, isReverse: true)
-                reverseRotateSideValue(top: &B, topSide: .reverseRight, right: &Y, rightSide: .left,
-                                       bottom: &R, bottomSide: .reverseRight, left: &O, leftSide: .right)
-            case "B":
-                rotateFront(of: &Y.matrix, isReverse: false)
-                rotateSideValue(top: &B, topSide: .reverseTop, right: &W, rightSide: .reverseLeft,
-                                bottom: &R, bottomSide: .top, left: &G, leftSide: .reverseRight)
-            case "B'":
-                rotateFront(of: &Y.matrix, isReverse: true)
-                reverseRotateSideValue(top: &B, topSide: .reverseTop, right: &W, rightSide: .reverseLeft,
-                                       bottom: &R, bottomSide: .top, left: &G, leftSide: .reverseRight)
-            case "D":
-                rotateFront(of: &R.matrix, isReverse: false)
-                rotateSideValue(top: &O, topSide: .bottom, right: &G, rightSide: .bottom,
-                                bottom: &Y, bottomSide: .bottom, left: &W, leftSide: .bottom)
-            case "D'":
-                rotateFront(of: &R.matrix, isReverse: true)
-                reverseRotateSideValue(top: &O, topSide: .bottom, right: &G, rightSide: .bottom,
-                                       bottom: &Y, bottomSide: .bottom, left: &W, leftSide: .bottom)
-            default:
-                print("command(\(command))가 올바르지 않습니다.")
+            case "U": rotate(of: &B, isReverse: false)
+            case "U'": rotate(of: &B, isReverse: true)
+            case "L": rotate(of: &W, isReverse: false)
+            case "L'": rotate(of: &W, isReverse: true)
+            case "F": rotate(of: &O, isReverse: false)
+            case "F'": rotate(of: &O, isReverse: true)
+            case "R": rotate(of: &G, isReverse: false)
+            case "R'": rotate(of: &G, isReverse: true)
+            case "B": rotate(of: &Y, isReverse: false)
+            case "B'": rotate(of: &Y, isReverse: true)
+            case "D": rotate(of: &R, isReverse: false)
+            case "D'":rotate(of: &R, isReverse: true)
+            default: print("command(\(command))가 올바르지 않습니다.")
             }
-            
-            if !isShuffle {
-                numberOfOperations += 1
-                printRubiksCube()
-            }
+            if !isShuffle { countOperationAndPrintRubiksCube() }
         }
     }
     
-    private func rotateSideValue(top: inout Section, topSide: Side, right: inout Section, rightSide: Side, bottom: inout Section, bottomSide: Side, left: inout Section, leftSide: Side) {
-        let toRightValue = findSideValue(of: top.name, side: topSide)
-        let toBottomValue = findSideValue(of: right.name, side: rightSide)
-        let toLeftValue = findSideValue(of: bottom.name, side: bottomSide)
-        let toTopValue = findSideValue(of: left.name, side: leftSide)
-
-        top.matrix = changeSideValue(of: top.name, side: topSide, value: toTopValue)
-        bottom.matrix = changeSideValue(of: bottom.name, side: bottomSide, value: toBottomValue)
-        right.matrix = changeSideValue(of: right.name, side: rightSide, value: toRightValue)
-        left.matrix = changeSideValue(of: left.name, side: leftSide, value: toLeftValue)
+    private func rotate(of front: inout Section, isReverse: Bool) {
+        var result = Array(repeating: Array(repeating: "", count: 3), count: 3)
+        for index in 0...2 {
+            for anotherIndex in 0...2 {
+                result[anotherIndex][index] = front.matrix[index][anotherIndex]
+            }
+        }
+        if isReverse {
+            front.matrix = [result[2], result[1], result[0]] // -90
+            reverseRotateSideValue(top: front.closeSections["top"]!, topSide: front.closeRow["top"]!, right: front.closeSections["right"]!, rightSide: front.closeRow["right"]!,
+                                   bottom: front.closeSections["bottom"]!, bottomSide: front.closeRow["bottom"]!, left: front.closeSections["left"]!, leftSide: front.closeRow["left"]!)
+        } else {
+            front.matrix = [result[0].reversed(), result[1].reversed(), result[2].reversed()] // 90
+            rotateSideValue(top: front.closeSections["top"]!, topSide: front.closeRow["top"]!, right: front.closeSections["right"]!, rightSide: front.closeRow["right"]!,
+                            bottom: front.closeSections["bottom"]!, bottomSide: front.closeRow["bottom"]!, left: front.closeSections["left"]!, leftSide: front.closeRow["left"]!)
+        }
     }
     
-    private func reverseRotateSideValue(top: inout Section , topSide: Side, right: inout Section, rightSide: Side, bottom: inout Section, bottomSide: Side, left: inout Section, leftSide: Side) {
-        let toLeftValue = findSideValue(of: top.name, side: topSide)
-        let toBottomValue = findSideValue(of: left.name, side: leftSide)
-        let toRightValue = findSideValue(of: bottom.name, side: bottomSide)
-        let toTopValue = findSideValue(of: right.name, side: rightSide)
+    private func rotateSideValue(top: String, topSide: Side, right: String, rightSide: Side, bottom: String, bottomSide: Side, left: String, leftSide: Side) {
+        let toRightValue = findSideValue(of: top, side: topSide)
+        let toBottomValue = findSideValue(of: right, side: rightSide)
+        let toLeftValue = findSideValue(of: bottom, side: bottomSide)
+        let toTopValue = findSideValue(of: left, side: leftSide)
         
-        top.matrix = changeSideValue(of: top.name, side: topSide, value: toTopValue)
-        bottom.matrix = changeSideValue(of: bottom.name, side: bottomSide, value: toBottomValue)
-        right.matrix = changeSideValue(of: right.name, side: rightSide, value: toRightValue)
-        left.matrix = changeSideValue(of: left.name, side: leftSide, value: toLeftValue)
+        rubiksCube[top].matrix = changeSideValue(of: top, side: topSide, value: toTopValue)
+        rubiksCube[bottom].matrix = changeSideValue(of: bottom, side: bottomSide, value: toBottomValue)
+        rubiksCube[right].matrix = changeSideValue(of: right, side: rightSide, value: toRightValue)
+        rubiksCube[left].matrix = changeSideValue(of: left, side: leftSide, value: toLeftValue)
+    }
+    
+    private func reverseRotateSideValue(top: String , topSide: Side, right: String, rightSide: Side, bottom: String, bottomSide: Side, left: String, leftSide: Side) {
+        let toLeftValue = findSideValue(of: top, side: topSide)
+        let toBottomValue = findSideValue(of: left, side: leftSide)
+        let toRightValue = findSideValue(of: bottom, side: bottomSide)
+        let toTopValue = findSideValue(of: right, side: rightSide)
+        
+        rubiksCube[top].matrix = changeSideValue(of: top, side: topSide, value: toTopValue)
+        rubiksCube[bottom].matrix = changeSideValue(of: bottom, side: bottomSide, value: toBottomValue)
+        rubiksCube[right].matrix = changeSideValue(of: right, side: rightSide, value: toRightValue)
+        rubiksCube[left].matrix = changeSideValue(of: left, side: leftSide, value: toLeftValue)
     }
 
-    private func changeSideValue(of name: String, side: Side, value: Array<String>) -> Matrix {
-        guard var result = sections.filter({ $0.name == name }).first?.matrix else { return Matrix() }
+    private func changeSideValue(of name: String, side: Side, value: Array<String>) -> Section.Matrix {
+        guard var result = sections.filter({ $0.name == name }).first?.matrix else { return Section.Matrix() }
         switch side {
         case .top: result[0] = value
         case .bottom: result[2] = value
@@ -277,7 +284,7 @@ printRubiksCube(): 현재 Cube를 출력합니다.
         var result = Array<String>()
         guard let matrix = sections.filter({ $0.name == name }).first?.matrix else { return result }
         switch side {
-        
+
         case .top: return matrix[0]
         case .bottom: return matrix[2]
             
@@ -289,24 +296,6 @@ printRubiksCube(): 현재 Cube를 출력합니다.
             
         case .reverseLeft: _ = stride(from: 2, through: 0, by: -1).map({ result.append(matrix[$0][0]) }); return result
         case .reverseRight: _ = stride(from: 2, through: 0, by: -1).map({ result.append(matrix[$0][2]) }); return result
-        }
-    }
-    
-    private func rotateFront(of front: inout Matrix, isReverse: Bool) {
-        
-        var result = Array(repeating: Array(repeating: "", count: 3), count: 3)
-        
-        // Transpose
-        for i in 0...2 {
-            for j in 0...2 {
-                result[j][i] = front[i][j]
-            }
-        }
-        
-        if isReverse {
-            front = [result[2], result[1], result[0]] // -90
-        } else {
-            front = [result[0].reversed(), result[1].reversed(), result[2].reversed()] // 90
         }
     }
 }

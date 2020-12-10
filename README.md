@@ -74,16 +74,16 @@
 
     ```swift
     "O": ["top": [B, Side.bottom], "right": [G, Side.left], 
-          "bottom": [R, Side.reverseTop], "left": [W,  Side.reverseRight]],
+          "bottom": [R, Side.reverseTop], "left": [W,  Side.right]],
     "B": ["top": [Y, Side.reverseTop], "right": [G, Side.reverseTop], 
           "bottom": [O, Side.reverseTop], "left": [W, Side.reverseTop]],
     "G": ["top": [B, Side.reverseRight], "right": [Y, Side.left], 
-          "bottom": [R, Side.reverseRight], "left": [O, Side.reverseRight]],
+          "bottom": [R, Side.reverseRight], "left": [O, Side.right]],
     "R": ["top": [O, Side.bottom], "right": [G, Side.bottom], 
           "bottom": [Y, Side.bottom], "left": [W, Side.bottom]],
     "W": ["top": [B, Side.left], "right": [O, Side.left], 
-          "bottom": [R, Side.left], "left": [Y, Side.reverseRight]],
-    "Y": ["top": [B, Side.reverseTop], "right": [W, Side.left], 
+          "bottom": [R, Side.reverseLeft], "left": [Y, Side.reverseRight]],
+    "Y": ["top": [B, Side.reverseTop], "right": [W, Side.reverseLeft], 
           "bottom": [R, Side.top], "left": [G, Side.reverseRight]]
     ```
 
@@ -91,5 +91,5 @@
 
     - 이 때 각각의 케이스에 맞춰 value를 구하는 Method는 `findSideValue()`
     - 값을 입력받아 각각의 value를 바꾸는 함수는 `changeSideValue()`
-    - `inout` 사용을 최소화하기 위해 `Section.name` 을 입력받아 해당하는 `Section` 탐색
+    - `inout` 사용을 최소화하기 위해 `Section.name` 을 입력받아 해당하는 `Section` 탐색(subscript 사용)
 
