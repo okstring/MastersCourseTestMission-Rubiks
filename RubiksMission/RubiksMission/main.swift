@@ -1,4 +1,5 @@
 import Foundation
 
-var flatCube = FlatCube(cube: [["R", "R", "W"], ["G", "C", "W"], ["G", "B", "B"]])
-flatCube.playFlatCube()
+var cube = Cube(cube: [["R", "R", "W"], ["G", "C", "W"], ["G", "B", "B"]])
+var flatCubeGame = FlatCubeGame(cube: cube)
+flatCubeGame.playFlatCube()

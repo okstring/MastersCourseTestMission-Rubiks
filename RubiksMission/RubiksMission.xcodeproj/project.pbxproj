@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7909F24A25830F5F0001AC62 /* Cube.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7909F24925830F5F0001AC62 /* Cube.swift */; };
+		7909F24D258313810001AC62 /* FlatCubeGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7909F24C258313810001AC62 /* FlatCubeGame.swift */; };
 		792229A9257DF929006F9A2E /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792229A8257DF929006F9A2E /* main.swift */; };
-		799F368D257DFF0500B84CEC /* FlatCube.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799F368C257DFF0500B84CEC /* FlatCube.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,9 +25,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7909F24925830F5F0001AC62 /* Cube.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cube.swift; sourceTree = "<group>"; };
+		7909F24C258313810001AC62 /* FlatCubeGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlatCubeGame.swift; sourceTree = "<group>"; };
 		792229A5257DF929006F9A2E /* RubiksMission */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = RubiksMission; sourceTree = BUILT_PRODUCTS_DIR; };
 		792229A8257DF929006F9A2E /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
-		799F368C257DFF0500B84CEC /* FlatCube.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlatCube.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,7 +62,8 @@
 			isa = PBXGroup;
 			children = (
 				792229A8257DF929006F9A2E /* main.swift */,
-				799F368C257DFF0500B84CEC /* FlatCube.swift */,
+				7909F24C258313810001AC62 /* FlatCubeGame.swift */,
+				7909F24925830F5F0001AC62 /* Cube.swift */,
 			);
 			path = RubiksMission;
 			sourceTree = "<group>";
@@ -123,7 +126,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				792229A9257DF929006F9A2E /* main.swift in Sources */,
-				799F368D257DFF0500B84CEC /* FlatCube.swift in Sources */,
+				7909F24D258313810001AC62 /* FlatCubeGame.swift in Sources */,
+				7909F24A25830F5F0001AC62 /* Cube.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
